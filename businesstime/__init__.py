@@ -164,7 +164,12 @@ class BusinessTime(object):
                 current = datetime.datetime.combine(d, current.time())
                 if prev is not None:
                     if prev.date() != current.date():
-                        time += datetime.timedelta(days=1)
+                        if prev.time() < self.business_hours[0]:
+                            time += datetime.timedelta(self.business_hours[1],self.business_hours[0])
+                        elif prev.time() > self.business_hours[0] and prev.time() < self.business_hours[1]:
+                            time += datetime.timedelta(self.business_hours[1],prev.time()])
+                        elif prev.time() > self.business_hours[1]:
+                            time += 0
                     if count == len(businessdays) - 1:
                         if current > d:
                             # We went too far
